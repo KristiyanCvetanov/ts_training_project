@@ -86,10 +86,15 @@ function getAllBookIssues(): BookIssue[] {
 }
 
 function createBookIssue(book_issue:BookIssueBase): BookIssue {
-    db.query('INSERT INTO book_issue (bookid, memberid, issue_date) VALUES (?, ?, ?)').run(book_issue.bookid, book_issue.memberid, book_issue.issue_date);
+    // create now date
+    const issue_date = new Date().toISOString();
+    db.query('INSERT INTO book_issue (bookid, memberid, issue_date) VALUES (?, ?, ?)').run(book_issue.bookId, book_issue.memberId, issue_date);
+    
     return {
-        ...book_issue,
+        bookid: book_issue.bookId,
+        memberid: book_issue.memberId,
         issueid: db.lastInsertRowid as number,
+        issue_date: issue_date,
     } as BookIssue;
 }
 
