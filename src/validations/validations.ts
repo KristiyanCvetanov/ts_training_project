@@ -48,7 +48,7 @@
 
 import { t } from "elysia";
 import type { Member, Book } from "../models/index";
-import { getMemberByIdFromDB, getBookByIdFromDB, getBookIssueByMemberIdFromDB, getBookIssueByBookIdFromDB } from "../db/db";
+import { getMemberByIdFromDB, getBookByIdFromDB, getBookIssueByMemberIdFromDB, getBookIssueByBookIdFromDB, getBookIssueByIdFromDB } from "../db/db";
 import { ValidationError } from "../errors/validation_error";
 
 const validation_member = t.Object({
@@ -129,6 +129,13 @@ function validate_member_issue_count(memberid: number): void {
     }
 }
 
+function validate_issueid(issueid: number): void {
+    const issue = getBookIssueByIdFromDB(issueid);
+    if (!issue) {
+        throw new ValidationError("Book issue not found");
+    }
+}
+
 export { 
     validation_member,
     validation_book,
@@ -137,6 +144,7 @@ export {
     validate_bookissued,
     validate_bookid,
     validate_member_issue_count,
+    validate_issueid,
     validation_param_member_id,
     validation_param_book_id,
     validation_param_book_issue_id
