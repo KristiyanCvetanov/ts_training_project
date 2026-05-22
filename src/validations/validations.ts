@@ -59,12 +59,12 @@ const validation_member = t.Object({
     }),
     email: t.String({format: "email"}),
     phone: t.String({
-        minLength:3, 
+        minLength:8, 
         maxLength:100,
         pattern: "^[0-9]+$"
     }),
     address: t.String({
-        minLength:3,
+        minLength:5,
         maxLength:100,
         pattern: "^[a-zA-Z\\s]+$"
     })
@@ -72,32 +72,32 @@ const validation_member = t.Object({
 
 const validation_book = t.Object({
     title: t.String({minLength:2, maxLength:100}),
-    subject: t.String({minLength:3, maxLength:100}),
+    subject: t.String({minLength:2, maxLength:100}),
     author: t.String({minLength:3, maxLength:100}),
     language: t.Union([
-        t.Literal("english"),
-        t.Literal("french"),
-        t.Literal("arabic"),
-        t.Literal("german"),
-        t.Literal("spanish"),
+        t.Literal("English"),
+        t.Literal("French"),
+        t.Literal("Arabic"),
+        t.Literal("German"),
+        t.Literal("Spanish"),
     ]),
 })
 
 const validation_book_issue = t.Object({
-    memberId: t.Numeric(),
-    bookId: t.Numeric()
+    memberId: t.Integer(),
+    bookId: t.Integer()
 })
 
 const validation_param_member_id = t.Object({
-    memberId: t.Numeric(),
+    memberId: t.Integer(),
 })
 
 const validation_param_book_id = t.Object({
-    bookId: t.Numeric(),
+    bookId: t.Integer(),
 })
 
 const validation_param_book_issue_id = t.Object({
-    issueId: t.Numeric(),
+    issueId: t.Integer(),
 })
 
 function validate_memberid(memberid: number): Member {
