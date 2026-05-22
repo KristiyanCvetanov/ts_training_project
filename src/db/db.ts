@@ -22,7 +22,7 @@
 import { Database } from 'bun:sqlite';
 const db = new Database('library.db');
 import type { Member, Book, BookIssue } from '../models/index';
-import type { MemberBase } from '../resources';
+import type { BookBase, BookIssueBase, MemberBase } from '../resources';
 
 
 function table_create():void{
@@ -69,7 +69,7 @@ function getAllBooks():Book[]{
     return books as Book[];
 }
 
-function createBooks(book:Book):Book{
+function createBooks(book:BookBase):Book{
     db.query('INSERT INTO books (title, subject, author, language) VALUES (?, ?, ?, ?)').run(book.title, book.subject, book.author, book.language);
     return {
         ...book,
@@ -85,7 +85,7 @@ function getAllBookIssues():BookIssue[]{
     return book_issues as BookIssue[];
 }
 
-function createBookIssue(book_issue:BookIssue):BookIssue{
+function createBookIssue(book_issue:BookIssueBase):BookIssue{
     db.query('INSERT INTO book_issue (bookid, memberid, issue_date) VALUES (?, ?, ?)').run(book_issue.bookid, book_issue.memberid, book_issue.issue_date);
     return {
         ...book_issue,
