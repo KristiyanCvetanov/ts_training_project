@@ -18,3 +18,5 @@ function getMemberById(id: number): Member {
 function getAllMembers(): Member[] {
     return getAllMembersFromDB();
 }
+
+export { createMember, getMemberById, getAllMembers };
