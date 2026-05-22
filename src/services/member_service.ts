@@ -7,11 +7,16 @@ import {
     getAllMembersFromDB
 } from "../db/db";
 
+import {
+    validate_memberid
+} from "../validations/validations";
+
 function createMember(member: MemberBase): Member {
     return createMemberInDB(member);
 }
 
 function getMemberById(id: number): Member {
+    validate_memberid(id);
     return getMemberByIdFromDB(id);
 }
 
