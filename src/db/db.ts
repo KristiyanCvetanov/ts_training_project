@@ -44,12 +44,12 @@ function getAllMembers(): Member[]{
     return members as Member[];
 }
 
-function getMemberById(id:number): Member{
+function getMemberById(id:number): Member {
     const member = db.query('SELECT * FROM members WHERE memberid = ?').get(id);
     return member as Member;
 }
 
-function createMember(member:MemberBase): Member{
+function createMember(member:MemberBase): Member {
     db.query('INSERT INTO members (name, email, phone, address) VALUES (?, ?, ?, ?)').run(member.name, member.email, member.phone, member.address);
     return {
         ...member,
@@ -59,7 +59,7 @@ function createMember(member:MemberBase): Member{
 
 
 //Book functions
-function getBookById(id:number):Book{
+function getBookById(id:number): Book {
     const book = db.query('SELECT * FROM books WHERE bookid = ?').get(id);
     return book as Book;
 }
@@ -69,7 +69,7 @@ function getAllBooks():Book[]{
     return books as Book[];
 }
 
-function createBooks(book:BookBase):Book{
+function createBooks(book:BookBase): Book {
     db.query('INSERT INTO books (title, subject, author, language) VALUES (?, ?, ?, ?)').run(book.title, book.subject, book.author, book.language);
     return {
         ...book,
@@ -80,12 +80,12 @@ function createBooks(book:BookBase):Book{
 //book issue functions
 
 
-function getAllBookIssues():BookIssue[]{
+function getAllBookIssues(): BookIssue[] {
     const book_issues = db.query('SELECT * FROM book_issue').all();
     return book_issues as BookIssue[];
 }
 
-function createBookIssue(book_issue:BookIssueBase):BookIssue{
+function createBookIssue(book_issue:BookIssueBase): BookIssue {
     db.query('INSERT INTO book_issue (bookid, memberid, issue_date) VALUES (?, ?, ?)').run(book_issue.bookid, book_issue.memberid, book_issue.issue_date);
     return {
         ...book_issue,
@@ -93,8 +93,13 @@ function createBookIssue(book_issue:BookIssueBase):BookIssue{
     } as BookIssue;
 }
 
-function deleteBookIssue(id:number):void{
+function deleteBookIssue(id:number): void {
     db.query('DELETE FROM book_issue WHERE issueid = ?').run(id);
+}
+
+function getBookIssueByMemberId(memberid:number): BookIssue[] {
+    const book_issues = db.query('SELECT * FROM book_issue WHERE memberid = ?').all(memberid);
+    return book_issues as BookIssue[];
 }
 
 export {
@@ -106,5 +111,6 @@ export {
     getAllBooks as getAllBooksFromDB, 
     getAllBookIssues as getAllBookIssuesFromDB, 
     createBookIssue as createBookIssueInDB, 
-    deleteBookIssue as deleteBookIssueFromDB
+    deleteBookIssue as deleteBookIssueFromDB,
+    getBookIssueByMemberId as getBookIssueByMemberIdFromDB
 };
