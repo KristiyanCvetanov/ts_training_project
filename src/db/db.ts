@@ -20,20 +20,17 @@
 // - delete book issue
 
 import { Database } from 'bun:sqlite';
-const db = new Database('library.db');
+import { dbPath } from './db_path';
+
+const db = new Database(dbPath);
 import type { Member, Book, BookIssue } from '../models/index';
 import type { BookBase, BookIssueBase, MemberBase } from '../resources';
 
 
 function table_create():void{
-    db.query('CREATE TABLE IF NOT EXISTS books (bookid INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, subject TEXT, author TEXT, language TEXT)').run();
-    db.query('CREATE TABLE IF NOT EXISTS book_issue (issueid INTEGER PRIMARY KEY AUTOINCREMENT, bookid INTEGER, memberid INTEGER, issue_date TEXT, REFERENCES books(bookid), FOREIGN KEY (memberid) REFERENCES members(memberid))').run();
     db.query('CREATE TABLE IF NOT EXISTS members (memberid INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phone TEXT, address TEXT)').run();
-}
-
-function addConstraints():void{
-    db.query('ALTER TABLE book_issue ADD CONSTRAINT fk_bookid FOREIGN KEY (bookid) REFERENCES books(bookid)').run();
-    db.query('ALTER TABLE book_issue ADD CONSTRAINT fk_memberid FOREIGN KEY (memberid) REFERENCES members(memberid)').run();
+    db.query('CREATE TABLE IF NOT EXISTS books (bookid INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, subject TEXT, author TEXT, language TEXT)').run();
+    db.query('CREATE TABLE IF NOT EXISTS book_issue (issueid INTEGER PRIMARY KEY AUTOINCREMENT, bookid INTEGER, memberid INTEGER, issue_date TEXT, FOREIGN KEY (bookid) REFERENCES books(bookid), FOREIGN KEY (memberid) REFERENCES members(memberid))').run();
 }
 
 
@@ -41,6 +38,7 @@ function addConstraints():void{
 //Member functions
 function getAllMembers(): Member[]{
     const members = db.query('SELECT * FROM members').all();
+    console.log(members);
     return members as Member[];
 }
 

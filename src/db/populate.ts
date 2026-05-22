@@ -1,5 +1,7 @@
 import { Database } from 'bun:sqlite';
-const db = new Database('library.db');
+import { dbPath } from './db_path';
+
+const db = new Database(dbPath);
 
 function table_drop():void{
     db.query('DROP TABLE IF EXISTS members').run();
@@ -10,12 +12,7 @@ function table_drop():void{
 function table_create():void{
     db.query('CREATE TABLE IF NOT EXISTS members (memberid INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phone TEXT, address TEXT)').run();
     db.query('CREATE TABLE IF NOT EXISTS books (bookid INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, subject TEXT, author TEXT, language TEXT)').run();
-    db.query('CREATE TABLE IF NOT EXISTS book_issue (issueid INTEGER PRIMARY KEY AUTOINCREMENT, bookid INTEGER, memberid INTEGER, issue_date TEXT, REFERENCES books(bookid), FOREIGN KEY (memberid) REFERENCES members(memberid))').run();
-}
-
-function addConstraints():void{
-    db.query('ALTER TABLE book_issue ADD CONSTRAINT fk_bookid FOREIGN KEY (bookid) REFERENCES books(bookid)').run();
-    db.query('ALTER TABLE book_issue ADD CONSTRAINT fk_memberid FOREIGN KEY (memberid) REFERENCES members(memberid)').run();
+    db.query('CREATE TABLE IF NOT EXISTS book_issue (issueid INTEGER PRIMARY KEY AUTOINCREMENT, bookid INTEGER, memberid INTEGER, issue_date TEXT, FOREIGN KEY (bookid) REFERENCES books(bookid), FOREIGN KEY (memberid) REFERENCES members(memberid))').run();
 }
 
 function populate_members():void{
@@ -38,7 +35,6 @@ function populate_book_issue():void{
 
 table_drop();
 table_create();
-addConstraints();
 populate_members();
 populate_books();
 populate_book_issue();
