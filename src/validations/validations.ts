@@ -120,4 +120,4 @@ function bookissue_validate_member_issue_count(memberid: number): void {
     }
 }
 
-export { validation_member, validation_book, validation_book_issue, bookissue_validate_memberid, bookissue_validate_member, bookissue_validate_bookid, bookissue_validate_member_issue_count };
+export { validation_member, validation_book, validation_book_issue, bookissue_validate_memberid, bookissue_validate_bookissued, bookissue_validate_bookid, bookissue_validate_member_issue_count };
