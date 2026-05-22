@@ -48,7 +48,7 @@
 
 import { t } from "elysia";
 import type { Member, Book } from "../models/index";
-import { getMemberByIdFromDB, getBookByIdFromDB, getBookIssueByMemberIdFromDB } from "../db/db";
+import { getMemberByIdFromDB, getBookByIdFromDB, getBookIssueByMemberIdFromDB, getBookIssueByBookIdFromDB } from "../db/db";
 
 
 const validation_member = t.Object({
@@ -97,12 +97,12 @@ function bookissue_validate_memberid(memberid: number): Member {
     return member;
 }
 
-function bookissue_validate_member(memberid: number): Member {
-    const member = getMemberByIdFromDB(memberid);
-    if (!member) {
-        throw new Error("Member not found");
+function bookissue_validate_bookissued(bookid: number): void {
+    const book = getBookIssueByBookIdFromDB(bookid);
+    if (book.length > 0) {
+        throw new Error("Book already issued");
     }
-    return member;
+    return book;
 }
 
 function bookissue_validate_bookid(bookid: number): Book {
