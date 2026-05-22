@@ -55,18 +55,18 @@ const validation_member = t.Object({
     name: t.String({
         minLength:3, 
         maxLength:100,
-        pattern: "^[a-zA-Z\\s]+$"
+        // pattern: "^[a-zA-Z\\s]+$"
     }),
     email: t.String({format: "email"}),
     phone: t.String({
         minLength:8, 
         maxLength:100,
-        pattern: "^[0-9]+$"
+        // pattern: "^[0-9]+$"
     }),
     address: t.String({
         minLength:5,
         maxLength:100,
-        pattern: "^[a-zA-Z\\s]+$"
+        // pattern: "^[a-zA-Z\\s]+$"
     })
 })
 
