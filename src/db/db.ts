@@ -107,6 +107,12 @@ function getBookIssueByMemberId(memberid:number): BookIssue[] {
     return book_issues as BookIssue[];
 }
 
+
+function getBookIssueByBookId(bookid:number): BookIssue {
+    const book_issues = db.query('SELECT * FROM book_issue WHERE bookid = ?').get(bookid);
+    return book_issues as BookIssue;
+}
+
 export {
     createMember as createMemberInDB, 
     getAllMembers as getAllMembersFromDB, 
@@ -117,5 +123,6 @@ export {
     getAllBookIssues as getAllBookIssuesFromDB, 
     createBookIssue as createBookIssueInDB, 
     deleteBookIssue as deleteBookIssueFromDB,
-    getBookIssueByMemberId as getBookIssueByMemberIdFromDB
+    getBookIssueByMemberId as getBookIssueByMemberIdFromDB,
+    getBookIssueByBookId as getBookIssueByBookIdFromDB
 };
