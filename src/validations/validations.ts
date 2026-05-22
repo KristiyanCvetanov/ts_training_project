@@ -47,6 +47,9 @@
 */
 
 import { t } from "elysia";
+import type { Member, Book } from "../models/index";
+import { getMemberByIdFromDB, getBookByIdFromDB, getBookIssueByMemberIdFromDB } from "../db/db";
+
 
 const validation_member = t.Object({
     name: t.String({
@@ -60,7 +63,11 @@ const validation_member = t.Object({
         maxLength:100,
         pattern: "^[0-9]+$"
     }),
-    address: t.String({minLength:3, maxLength:100}),
+    address: t.String({
+        minLength:3,
+        maxLength:100,
+        pattern: "^[a-zA-Z\\s]+$"
+    })
 })
 
 const validation_book = t.Object({
@@ -82,6 +89,27 @@ const validation_book_issue = t.Object({
     issue_date: t.String({format: "date"}),
 })
 
-export { validation_member, validation_book, validation_book_issue };
+function bookissue_validate_memberid(memberid: number): Member {
+    const member = getMemberByIdFromDB(memberid);
+    if (!member) {
+        throw new Error("Member not found");
+    }
+    return member;
+}
 
-function 
+function bookissue_validate_member_issues(memberid: number): void {
+    const issues = getBookIssueByMemberIdFromDB(memberid);
+    if (issues.length >= 3) {
+        throw new Error("Member has already issued 3 books");
+    }
+}
+
+function bookissue_validate_bookid(bookid: number): Book {
+    const book = getBookByIdFromDB(bookid);
+    if (!book) {
+        throw new Error("Book not found");
+    }
+    return book;
+}
+
+export { validation_member, validation_book, validation_book_issue, bookissue_validate_memberid, bookissue_validate_member_issues, bookissue_validate_bookid };
