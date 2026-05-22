@@ -84,9 +84,20 @@ const validation_book = t.Object({
 })
 
 const validation_book_issue = t.Object({
-    memberid: t.Numeric(),
-    bookid: t.Numeric(),
-    issue_date: t.String({format: "date"}),
+    memberId: t.Numeric(),
+    bookId: t.Numeric()
+})
+
+const validation_param_member_id = t.Object({
+    memberId: t.Numeric(),
+})
+
+const validation_param_book_id = t.Object({
+    bookId: t.Numeric(),
+})
+
+const validation_param_book_issue_id = t.Object({
+    issueId: t.Numeric(),
 })
 
 function validate_memberid(memberid: number): Member {
@@ -120,4 +131,15 @@ function validate_member_issue_count(memberid: number): void {
     }
 }
 
-export { validation_member, validation_book, validation_book_issue, validate_memberid, validate_bookissued, validate_bookid, validate_member_issue_count };
+export { 
+    validation_member,
+    validation_book,
+    validation_book_issue,
+    validate_memberid,
+    validate_bookissued,
+    validate_bookid,
+    validate_member_issue_count,
+    validation_param_member_id,
+    validation_param_book_id,
+    validation_param_book_issue_id
+};

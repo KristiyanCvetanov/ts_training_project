@@ -3,27 +3,33 @@ import type { BookIssueBase, BookIssueResponse, StatusResponse, BookIssueContent
 
 import { createBookIssue, getAllBookIssues, deleteBookIssue } from "../services/book_issues_service";
 import type { BookIssue } from "../models";
+import { validation_book_issue, validation_param_book_issue_id } from "../validations/validations";
 
 export const bookIssuesApi = new Elysia( { prefix: "/issues" } )
     .post("/", ({ body }: { body: BookIssueBase }): BookIssueResponse | StatusResponse => {
         const book_issue: BookIssue = createBookIssue(body);
         
-        // TODO: add schemas and validations
+        // TODO: add error handling
         return mapBookIssueToResponse(book_issue);
+    }, {
+        body: validation_book_issue
     })
 
     .get("/", (): BookIssueResponse[] | StatusResponse => {
         const book_issues: BookIssue[] = getAllBookIssues();
 
-        // TODO: add schemas and validations
+        // TODO: add error handling
         return book_issues.map((book_issue) => mapBookIssueToResponse(book_issue));
     })
 
-    .delete("/:id", ({ params }: { params: { id: number } }): StatusResponse => {
-        deleteBookIssue(params.id);
+    .delete("/:issueId", ({ params }: { params: { issueId: number } }): StatusResponse => {
+        const book_issue: BookIssue = getBookIssueById(params.issueId);
+        deleteBookIssue(params.issueId);
 
-        // TODO: add schemas and validations
+        // TODO: add error handling
         return mapBookIssueToResponse(book_issue);
+    }, {
+        params: validation_param_book_issue_id
     })
 
 export function mapBookIssueToResponse(book_issue: BookIssue): BookIssueResponse {
@@ -37,4 +43,8 @@ export function mapBookIssueToResponse(book_issue: BookIssue): BookIssueResponse
             memberId: book_issue.memberid
         } as BookIssueContent
     };
+}
+
+function getBookIssueById(id: number): BookIssue {
+    throw new Error("Function not implemented.");
 }
