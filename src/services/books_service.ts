@@ -7,6 +7,11 @@ import {
     getBookByIdFromDB
 } from "../db/db";
 
+import {
+    validate_bookid
+} from "../validations/validations";
+
+
 function createBook(book: BookBase): Book {
     return createBooksInDB(book);
 }
@@ -16,6 +21,7 @@ function getAllBooks(): Book[] {
 }
 
 function getBookById(id: number): Book {
+    validate_bookid(id);
     return getBookByIdFromDB(id);
 }
 
