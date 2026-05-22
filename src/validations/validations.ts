@@ -98,11 +98,11 @@ function bookissue_validate_memberid(memberid: number): Member {
 }
 
 function bookissue_validate_bookissued(bookid: number): void {
-    const book = getBookIssueByBookIdFromDB(bookid);
-    if (book.length > 0) {
+    const bookIssue = getBookIssueByBookIdFromDB(bookid);
+    if (bookIssue) {
         throw new Error("Book already issued");
     }
-    return book;
+    return bookIssue;
 }
 
 function bookissue_validate_bookid(bookid: number): Book {
