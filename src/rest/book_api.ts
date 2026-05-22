@@ -5,28 +5,44 @@ import { createBook, getAllBooks, getBookById } from "../services/books_service"
 import type { Book } from "../models";
 
 import { validation_book, validation_param_book_id } from "../validations/validations";
+import { handleError } from "../errors/error_util";
 
 export const bookApi = new Elysia( { prefix: "/books" } )
     .post("/", ({ body }: { body: BookBase }): BookResponse | StatusResponse => {
-        const book: Book = createBook(body);
+        let book: Book;
 
-        // TODO: add error handling
+        try {
+           book = createBook(body);
+        } catch (error: unknown) {
+            return handleError(error);
+        }
+        
         return mapBookToResponse(book);
     }, {
         body: validation_book
     })
 
     .get("/", (): BookResponse[] | StatusResponse => {
-        const books: Book[] = getAllBooks();
+        let books: Book[];
+
+        try {
+            books = getAllBooks();
+        } catch (error: unknown) {
+            return handleError(error);
+        }
         
-        // TODO: add error handling
         return books.map((book) => mapBookToResponse(book));
     })
 
     .get("/:bookId", ({ params }: { params: { bookId: number } }): BookResponse | StatusResponse => {
-        const book: Book = getBookById(params.bookId);
+        let book: Book;
 
-        // TODO: add error handling
+        try {
+            book = getBookById(params.bookId);
+        } catch (error: unknown) {
+            return handleError(error);
+        }
+
         return mapBookToResponse(book);
     }, {
         params: validation_param_book_id

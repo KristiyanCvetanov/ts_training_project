@@ -4,29 +4,45 @@ import type { BookIssueBase, BookIssueResponse, StatusResponse, BookIssueContent
 import { createBookIssue, getAllBookIssues, deleteBookIssue } from "../services/book_issues_service";
 import type { BookIssue } from "../models";
 import { validation_book_issue, validation_param_book_issue_id } from "../validations/validations";
+import { handleError } from "../errors/error_util";
+
 
 export const bookIssuesApi = new Elysia( { prefix: "/issues" } )
     .post("/", ({ body }: { body: BookIssueBase }): BookIssueResponse | StatusResponse => {
-        const book_issue: BookIssue = createBookIssue(body);
+        let book_issue: BookIssue;
+
+        try {
+            book_issue = createBookIssue(body);
+        } catch (error: unknown) {
+            return handleError(error);
+        }
         
-        // TODO: add error handling
         return mapBookIssueToResponse(book_issue);
     }, {
         body: validation_book_issue
     })
 
     .get("/", (): BookIssueResponse[] | StatusResponse => {
-        const book_issues: BookIssue[] = getAllBookIssues();
+        let book_issues: BookIssue[];
 
-        // TODO: add error handling
+        try {
+            book_issues = getAllBookIssues();
+        } catch (error: unknown) {
+            return handleError(error);
+        }
+
         return book_issues.map((book_issue) => mapBookIssueToResponse(book_issue));
     })
 
     .delete("/:issueId", ({ params }: { params: { issueId: number } }): StatusResponse => {
         const book_issue: BookIssue = getBookIssueById(params.issueId);
-        deleteBookIssue(params.issueId);
-
-        // TODO: add error handling
+        
+        try {
+            deleteBookIssue(params.issueId);
+        } catch (error: unknown) {
+            return handleError(error);
+        }
+        
         return mapBookIssueToResponse(book_issue);
     }, {
         params: validation_param_book_issue_id
