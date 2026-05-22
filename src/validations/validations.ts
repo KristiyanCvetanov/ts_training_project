@@ -97,11 +97,12 @@ function bookissue_validate_memberid(memberid: number): Member {
     return member;
 }
 
-function bookissue_validate_member_issues(memberid: number): void {
-    const issues = getBookIssueByMemberIdFromDB(memberid);
-    if (issues.length >= 3) {
-        throw new Error("Member has already issued 3 books");
+function bookissue_validate_member(memberid: number): void {
+    const member = getMemberByIdFromDB(memberid);
+    if (!member) {
+        throw new Error("Member not found");
     }
+    return member;
 }
 
 function bookissue_validate_bookid(bookid: number): Book {
@@ -119,4 +120,4 @@ function bookissue_validate_member_issue_count(memberid: number): void {
     }
 }
 
-export { validation_member, validation_book, validation_book_issue, bookissue_validate_memberid, bookissue_validate_member_issues, bookissue_validate_bookid, bookissue_validate_member_issue_count };
+export { validation_member, validation_book, validation_book_issue, bookissue_validate_memberid, bookissue_validate_member, bookissue_validate_bookid, bookissue_validate_member_issue_count };
