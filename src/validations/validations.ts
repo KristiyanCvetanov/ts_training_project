@@ -49,7 +49,7 @@
 import { t } from "elysia";
 import type { Member, Book } from "../models/index";
 import { getMemberByIdFromDB, getBookByIdFromDB, getBookIssueByMemberIdFromDB, getBookIssueByBookIdFromDB } from "../db/db";
-
+import { ValidationError } from "../errors/validation_error";
 
 const validation_member = t.Object({
     name: t.String({
@@ -100,38 +100,32 @@ const validation_param_book_issue_id = t.Object({
     issueId: t.Integer(),
 })
 
-class BookValidationErrors extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = "BookValidationErrors";
-    }
-}
 
 function validate_memberid(memberid: number): void {
     const member = getMemberByIdFromDB(memberid);
     if (!member) {
-        throw new BookValidationErrors("Member not found");
+        throw new ValidationError("Member not found");
     }
 }
 
 function validate_bookissued(bookid: number): void {
     const bookIssue = getBookIssueByBookIdFromDB(bookid);
     if (bookIssue) {
-        throw new BookValidationErrors("Book already issued");
+        throw new ValidationError("Book already issued");
     }
 }
 
 function validate_bookid(bookid: number): void {
     const book = getBookByIdFromDB(bookid);
     if (!book) {
-        throw new BookValidationErrors("Book not found");    
+        throw new ValidationError("Book not found");    
     }
 }
 
 function validate_member_issue_count(memberid: number): void {
     const issues = getBookIssueByMemberIdFromDB(memberid);
     if (issues.length >= 3) {
-        throw new BookValidationErrors("Member has already issued 3 books");
+        throw new ValidationError("Member has already issued 3 books");
     }
 }
 

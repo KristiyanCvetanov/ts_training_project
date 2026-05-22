@@ -9,6 +9,7 @@ import {
 } from "../db/db";
 
 function createBookIssue(book_issue: BookIssueBase): BookIssue {
+    
     return createBookIssueInDB(book_issue);
 }
 
