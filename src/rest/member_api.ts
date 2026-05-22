@@ -3,6 +3,8 @@ import type { MemberBase, MemberResponse, StatusResponse } from "../resources/in
 import { createMember, getMemberById, getAllMembers } from "../services/member_service"
 import type { Member } from "../models";
 
+import { validation_member } from "../validations/validations";
+
 export const memberApi = new Elysia( { prefix: "/members" } )
     .post("/", ({ body }: { body: MemberBase }): MemberResponse | StatusResponse => {
         // TODO: add schemas and validations

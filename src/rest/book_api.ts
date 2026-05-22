@@ -4,6 +4,8 @@ import type { BookBase, BookResponse, StatusResponse } from "../resources/index"
 import { createBook, getAllBooks, getBookById } from "../services/books_service";
 import type { Book } from "../models";
 
+import { validation_book } from "../validations/validations";
+
 export const bookApi = new Elysia( { prefix: "/books" } )
     .post("/", ({ body }: { body: BookBase }): BookResponse | StatusResponse => {
         const book: Book = createBook(body);
