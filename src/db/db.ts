@@ -22,6 +22,7 @@
 import { Database } from 'bun:sqlite';
 const db = new Database('library.db');
 import type { Member, Book, BookIssue } from '../models/index';
+import type { MemberBase } from '../resources';
 
 
 function table_create():void{
@@ -38,17 +39,17 @@ function addConstraints():void{
 
 
 //Member functions
-function get_all_members():Member[]{
+function getAllMembers(): Member[]{
     const members = db.query('SELECT * FROM members').all();
     return members as Member[];
 }
 
-function get_member_by_id(id:number):Member{
+function getMemberById(id:number): Member{
     const member = db.query('SELECT * FROM members WHERE memberid = ?').get(id);
     return member as Member;
 }
 
-function create_member(member:Member):Member{
+function createMember(member:MemberBase): Member{
     db.query('INSERT INTO members (name, email, phone, address) VALUES (?, ?, ?, ?)').run(member.name, member.email, member.phone, member.address);
     return {
         ...member,
@@ -58,17 +59,17 @@ function create_member(member:Member):Member{
 
 
 //Book functions
-function get_book_by_id(id:number):Book{
+function getBookById(id:number):Book{
     const book = db.query('SELECT * FROM books WHERE bookid = ?').get(id);
     return book as Book;
 }
 
-function get_all_books():Book[]{
+function getAllBooks():Book[]{
     const books = db.query('SELECT * FROM books').all();
     return books as Book[];
 }
 
-function create_book(book:Book):Book{
+function createBooks(book:Book):Book{
     db.query('INSERT INTO books (title, subject, author, language) VALUES (?, ?, ?, ?)').run(book.title, book.subject, book.author, book.language);
     return {
         ...book,
@@ -79,12 +80,12 @@ function create_book(book:Book):Book{
 //book issue functions
 
 
-function get_all_book_issues():BookIssue[]{
+function getAllBookIssues():BookIssue[]{
     const book_issues = db.query('SELECT * FROM book_issue').all();
     return book_issues as BookIssue[];
 }
 
-function create_book_issue(book_issue:BookIssue):BookIssue{
+function createBookIssue(book_issue:BookIssue):BookIssue{
     db.query('INSERT INTO book_issue (bookid, memberid, issue_date) VALUES (?, ?, ?)').run(book_issue.bookid, book_issue.memberid, book_issue.issue_date);
     return {
         ...book_issue,
@@ -92,8 +93,18 @@ function create_book_issue(book_issue:BookIssue):BookIssue{
     } as BookIssue;
 }
 
-function delete_book_issue(id:number):void{
+function deleteBookIssue(id:number):void{
     db.query('DELETE FROM book_issue WHERE issueid = ?').run(id);
 }
 
-export {db, get_all_members, get_member_by_id, create_book, get_book_by_id, get_all_books, create_member, get_all_book_issues, create_book_issue, delete_book_issue};
+export {
+    createMember as createMemberInDB, 
+    getAllMembers as getAllMembersFromDB, 
+    getMemberById as getMemberByIdFromDB, 
+    createBooks as createBooksInDB, 
+    getBookById as getBookByIdFromDB, 
+    getAllBooks as getAllBooksFromDB, 
+    getAllBookIssues as getAllBookIssuesFromDB, 
+    createBookIssue as createBookIssueInDB, 
+    deleteBookIssue as deleteBookIssueFromDB
+};
