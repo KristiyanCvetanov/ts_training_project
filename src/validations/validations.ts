@@ -100,34 +100,38 @@ const validation_param_book_issue_id = t.Object({
     issueId: t.Numeric(),
 })
 
-function validate_memberid(memberid: number): Member {
+class BookValidationErrors extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "BookValidationErrors";
+    }
+}
+
+function validate_memberid(memberid: number): void {
     const member = getMemberByIdFromDB(memberid);
     if (!member) {
-        throw new Error("Member not found");
+        throw new BookValidationErrors("Member not found");
     }
-    return member;
 }
 
 function validate_bookissued(bookid: number): void {
     const bookIssue = getBookIssueByBookIdFromDB(bookid);
     if (bookIssue) {
-        throw new Error("Book already issued");
+        throw new BookValidationErrors("Book already issued");
     }
-    return bookIssue;
 }
 
-function validate_bookid(bookid: number): Book {
+function validate_bookid(bookid: number): void {
     const book = getBookByIdFromDB(bookid);
     if (!book) {
-        throw new Error("Book not found");
+        throw new BookValidationErrors("Book not found");    
     }
-    return book;
 }
 
 function validate_member_issue_count(memberid: number): void {
     const issues = getBookIssueByMemberIdFromDB(memberid);
     if (issues.length >= 3) {
-        throw new Error("Member has already issued 3 books");
+        throw new BookValidationErrors("Member has already issued 3 books");
     }
 }
 
