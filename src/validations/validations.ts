@@ -112,4 +112,11 @@ function bookissue_validate_bookid(bookid: number): Book {
     return book;
 }
 
+function bookissue_validate_member_issue_count(memberid: number): void {
+    const issues = getBookIssueByMemberIdFromDB(memberid);
+    if (issues.length >= 3) {
+        throw new Error("Member has already issued 3 books");
+    }
+}
+
 export { validation_member, validation_book, validation_book_issue, bookissue_validate_memberid, bookissue_validate_member_issues, bookissue_validate_bookid };
