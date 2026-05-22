@@ -26,7 +26,7 @@ export const bookIssuesApi = new Elysia( { prefix: "/issues" } )
         return mapBookIssueToResponse(book_issue);
     })
 
-function mapBookIssueToResponse(book_issue: BookIssue): BookIssueResponse {
+export function mapBookIssueToResponse(book_issue: BookIssue): BookIssueResponse {
     return {
         success: true,
         message: "Book issue created successfully",

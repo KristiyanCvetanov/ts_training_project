@@ -1,9 +1,11 @@
 import { Elysia } from "elysia"
-import type { MemberBase, MemberResponse, StatusResponse } from "../resources/index"
+import type { MemberBase, MemberResponse, StatusResponse, BookIssueResponse } from "../resources/index"
 import { createMember, getMemberById, getAllMembers } from "../services/member_service"
-import type { Member } from "../models";
+import type { BookIssue, Member } from "../models";
 
 import { validation_member } from "../validations/validations";
+import { getBookIssueByMemberId } from "../services/book_issues_service";
+import { mapBookIssueToResponse } from "./book_issues_api";
 
 export const memberApi = new Elysia( { prefix: "/members" } )
     .post("/", ({ body }: { body: MemberBase }): MemberResponse | StatusResponse => {
@@ -27,14 +29,12 @@ export const memberApi = new Elysia( { prefix: "/members" } )
         // TODO: add schemas and validations
         return mapMemberToResponse(member);
     })
-    
-    .get("/:id/issues", ({ params }):  StatusResponse => {
-        // TODO: fetch the the DB
+
+    .get("/:id/issues", ({ params }: { params: { id: number } }): BookIssueResponse[] | StatusResponse => {
+        const book_issues: BookIssue[] = getBookIssueByMemberId(params.id);
+
         // TODO: add schemas and validations
-        return {
-            success: false,
-            message: "Not implemented"
-        };
+        return book_issues.map((book_issue) => mapBookIssueToResponse(book_issue));
     })
 
 function mapMemberToResponse(member: Member): MemberResponse {
