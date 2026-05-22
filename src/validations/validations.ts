@@ -89,7 +89,7 @@ const validation_book_issue = t.Object({
     issue_date: t.String({format: "date"}),
 })
 
-function bookissue_validate_memberid(memberid: number): Member {
+function validate_memberid(memberid: number): Member {
     const member = getMemberByIdFromDB(memberid);
     if (!member) {
         throw new Error("Member not found");
@@ -97,7 +97,7 @@ function bookissue_validate_memberid(memberid: number): Member {
     return member;
 }
 
-function bookissue_validate_bookissued(bookid: number): void {
+function validate_bookissued(bookid: number): void {
     const bookIssue = getBookIssueByBookIdFromDB(bookid);
     if (bookIssue) {
         throw new Error("Book already issued");
@@ -105,7 +105,7 @@ function bookissue_validate_bookissued(bookid: number): void {
     return bookIssue;
 }
 
-function bookissue_validate_bookid(bookid: number): Book {
+function validate_bookid(bookid: number): Book {
     const book = getBookByIdFromDB(bookid);
     if (!book) {
         throw new Error("Book not found");
@@ -113,11 +113,11 @@ function bookissue_validate_bookid(bookid: number): Book {
     return book;
 }
 
-function bookissue_validate_member_issue_count(memberid: number): void {
+function validate_member_issue_count(memberid: number): void {
     const issues = getBookIssueByMemberIdFromDB(memberid);
     if (issues.length >= 3) {
         throw new Error("Member has already issued 3 books");
     }
 }
 
-export { validation_member, validation_book, validation_book_issue, bookissue_validate_memberid, bookissue_validate_bookissued, bookissue_validate_bookid, bookissue_validate_member_issue_count };
+export { validation_member, validation_book, validation_book_issue, validate_memberid, validate_bookissued, validate_bookid, validate_member_issue_count };
