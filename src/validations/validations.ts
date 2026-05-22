@@ -97,7 +97,7 @@ function bookissue_validate_memberid(memberid: number): Member {
     return member;
 }
 
-function bookissue_validate_member(memberid: number): void {
+function bookissue_validate_member(memberid: number): Member {
     const member = getMemberByIdFromDB(memberid);
     if (!member) {
         throw new Error("Member not found");
