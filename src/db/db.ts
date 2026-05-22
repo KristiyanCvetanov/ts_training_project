@@ -35,8 +35,6 @@ function addConstraints():void{
     db.query('ALTER TABLE book_issue ADD CONSTRAINT fk_memberid FOREIGN KEY (memberid) REFERENCES members(memberid)').run();
 }
 
-table_create();
-
 
 
 //Member functions
@@ -98,4 +96,4 @@ function delete_book_issue(id:number):void{
     db.query('DELETE FROM book_issue WHERE issueid = ?').run(id);
 }
 
-export {db, table_create, get_all_members, get_member_by_id, create_book, get_book_by_id, get_all_books, create_member, get_all_book_issues, create_book_issue, delete_book_issue};
+export {db, get_all_members, get_member_by_id, create_book, get_book_by_id, get_all_books, create_member, get_all_book_issues, create_book_issue, delete_book_issue};
