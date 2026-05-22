@@ -50,10 +50,10 @@ function getMemberById(id:number): Member {
 }
 
 function createMember(member:MemberBase): Member {
-    db.query('INSERT INTO members (name, email, phone, address) VALUES (?, ?, ?, ?)').run(member.name, member.email, member.phone, member.address);
+    const { lastInsertRowid } = db.query('INSERT INTO members (name, email, phone, address) VALUES (?, ?, ?, ?)').run(member.name, member.email, member.phone, member.address);
     return {
         ...member,
-        memberid: db.lastInsertRowid as number,
+        memberid: lastInsertRowid,
     } as Member;
 }
 
@@ -70,10 +70,10 @@ function getAllBooks():Book[]{
 }
 
 function createBooks(book:BookBase): Book {
-    db.query('INSERT INTO books (title, subject, author, language) VALUES (?, ?, ?, ?)').run(book.title, book.subject, book.author, book.language);
+    const { lastInsertRowid } = db.query('INSERT INTO books (title, subject, author, language) VALUES (?, ?, ?, ?)').run(book.title, book.subject, book.author, book.language);
     return {
         ...book,
-        bookid: db.lastInsertRowid as number,
+        bookid: lastInsertRowid,
     } as Book;
 }
 
@@ -88,12 +88,12 @@ function getAllBookIssues(): BookIssue[] {
 function createBookIssue(book_issue:BookIssueBase): BookIssue {
     // create now date
     const issue_date = new Date().toISOString();
-    db.query('INSERT INTO book_issue (bookid, memberid, issue_date) VALUES (?, ?, ?)').run(book_issue.bookId, book_issue.memberId, issue_date);
+    const { lastInsertRowid } = db.query('INSERT INTO book_issue (bookid, memberid, issue_date) VALUES (?, ?, ?)').run(book_issue.bookId, book_issue.memberId, issue_date);
     
     return {
         bookid: book_issue.bookId,
         memberid: book_issue.memberId,
-        issueid: db.lastInsertRowid as number,
+        issueid: lastInsertRowid,
         issue_date: issue_date,
     } as BookIssue;
 }
