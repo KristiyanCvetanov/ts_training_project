@@ -28,3 +28,12 @@ export const memberApi = new Elysia( { prefix: "/members" } )
             message: "Not implemented"
         };
     })
+    
+    .get("/:id/issues", ({ params }):  ErrorResponse => {
+        // TODO: fetch the the DB
+        // TODO: add schemas and validations
+        return {
+            success: false,
+            message: "Not implemented"
+        };
+    })
